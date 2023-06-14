@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src=""></script>
+    <!-- import bootstrap-->
+    <script src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <!-- axios -->
+    <script src="./node_modules/axios/dist/axios.min.js"></script>
+    <style>
+        body {
+            background-color: #f0ecff;
+        }
+        
+        #creat-btn:hover {
+            scale: 200%;
+            transition: 1000ms;
+            rotate: 180deg;
+        }
+        
+        #creat-btn {
+            scale: 100%;
+            transition: 1000ms;
+            rotate: 0deg;
+        }
+        /*====== loader ======*/
+        
+        .lds-spinner {
+            color: official;
+            display: inline-block;
+            position: relative;
+            width: 80px;
+            height: 80px;
+        }
+        
+        .lds-spinner div {
+            transform-origin: 40px 40px;
+            animation: lds-spinner 1.2s linear infinite;
+        }
+        
+        .lds-spinner div:after {
+            content: " ";
+            display: block;
+            position: absolute;
+            top: 3px;
+            left: 37px;
+            width: 6px;
+            height: 18px;
+            border-radius: 20%;
+            background: #fcfcfc;
+        }
+        
+        .lds-spinner div:nth-child(1) {
+            transform: rotate(0deg);
+            animation-delay: -1.1s;
+        }
+        
+        .lds-spinner div:nth-child(2) {
+            transform: rotate(30deg);
+            animation-delay: -1s;
+        }
+        
+        .lds-spinner div:nth-child(3) {
+            transform: rotate(60deg);
+            animation-delay: -0.9s;
+        }
+        
+        .lds-spinner div:nth-child(4) {
+            transform: rotate(90deg);
+            animation-delay: -0.8s;
+        }
+        
+        .lds-spinner div:nth-child(5) {
+            transform: rotate(120deg);
+            animation-delay: -0.7s;
+        }
+        
+        .lds-spinner div:nth-child(6) {
+            transform: rotate(150deg);
+            animation-delay: -0.6s;
+        }
+        
+        .lds-spinner div:nth-child(7) {
+            transform: rotate(180deg);
+            animation-delay: -0.5s;
+        }
+        
+        .lds-spinner div:nth-child(8) {
+            transform: rotate(210deg);
+            animation-delay: -0.4s;
+        }
+        
+        .lds-spinner div:nth-child(9) {
+            transform: rotate(240deg);
+            animation-delay: -0.3s;
+        }
+        
+        .lds-spinner div:nth-child(10) {
+            transform: rotate(270deg);
+            animation-delay: -0.2s;
+        }
+        
+        .lds-spinner div:nth-child(11) {
+            transform: rotate(300deg);
+            animation-delay: -0.1s;
+        }
+        
+        .lds-spinner div:nth-child(12) {
+            transform: rotate(330deg);
+            animation-delay: 0s;
+        }
+        
+        @keyframes lds-spinner {
+            0% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+    <div id="alertplace" class="show fade w-100 justify-content-center position-fixed bottom-0  z-3 mx-4  ">
+    </div>
+
+    <!--  ==== MODAL ====  -->
+    <!--  LOGIN MODAL  -->
+    <div class="modal fade" id="loginmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Login</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label for="recipient-name" class="col-form-label">User name:</label>
+                            <input type="text" class="form-control" id="username-input" value="ma7m0ud1">
+                        </div>
+                        <div class="mb-3">
+                            <label for="message-text" class="col-form-label">Password:</label>
+                            <input type="password" class="form-control" id="password-input" value="123456">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="login()">Login</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- // LOGIN MODAL // -->
+
+    <!--  REGISTER MODAL  -->
+    <div class="modal fade" id="registermodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Sign Up</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label for="recipient-name" class="col-form-label">User name:</label>
+                            <input type="text" class="form-control" id="username-register-input" value="ma7m0ud1">
+                        </div>
+                        <div class="mb-3">
+                            <label for="recipient-name" class="col-form-label">Name:</label>
+                            <input type="text" class="form-control" id="name-register-input" value="mahmoud">
+                        </div>
+                        <div class="mb-3">
+                            <label for="message-text" class="col-form-label">Password:</label>
+                            <input type="password" class="form-control" id="password-register-input" value="123456">
+                        </div>
+                        <div class="mb-3">
+                            <label for="message-text" class="col-form-label">Upload Image:</label>
+                            <input type="file" class="form-control" id="image-register-input">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="register()">Sin UP</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- // REGISTER MODAL // -->
+
+
+    <!--  CREAT POST MODAL  -->
+    <div class="modal fade" id="creat-post-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="titlemodal">Creat Post</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label id="labeltitle" for="recipient-name" class="col-form-label">Title:</label>
+                            <input type="text" class="form-control" id="title-input" value="ma7m0ud1">
+                        </div>
+                        <div id="bodydiv" class="mb-3">
+                            <label for="message-text" class="col-form-label">Post:</label>
+                            <textarea class="form-control" id="body-input"></textarea>
+                        </div>
+                        <input id="post-id-input" type="hidden" value="">
+                        <div id="imgdiv" class="mb-3">
+                            <label for="message-text" class="col-form-label">Upload Image:</label>
+                            <input type="file" class="form-control" id="image-input">
+                        </div>
+                    </form>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button id="accept-btn" type="button" class="btn btn-primary" onclick="creatpost()">Publish</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- // CREAT POST MODAL // -->
+
+    <!--  Delete POST MODAL  -->
+    <div class="modal fade" id="delete-post-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="titlemodal">Delete Post</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label id="labeltitle" for="recipient-name" class="col-form-label">Do you want to delete the post?</label>
+                        </div>
+                        <input id="post-id-input-delete" type="hidden" value="">
+                    </form>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button id="accept-btn" type="button" class="btn btn-primary" onclick="deletepost()">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- // Delete POST MODAL // -->
+
+    <!--  ==== //MODAL// ====  -->
+
+    <!--  NAV BAR CONT  -->
+    <div class="container d-flex justify-content-center ">
+        <div class="col-8 ">
+            <nav class="navbar  navbar-expand-lg   shadow mb-5 rounded-bottom-3 bg-light pt-3">
+                <div class="container-fluid" style="display: flex;align-items: baseline;">
+                    <a class=" navbar-brand " href="home.html">Tarmeez</a>
+                    <button class="navbar-toggler " type="button " data-bs-toggle="collapse " data-bs-target="#navbarNav " aria-controls="navbarNav " aria-expanded="false " aria-label="Toggle navigation ">
+                        <span class="navbar-toggler-icon "></span>
+                    </button>
+                    <div id="head" class="collapse navbar-collapse  " id="navbarNav ">
+                        <ul class="navbar-nav ">
+                            <li class="nav-item ">
+                                <a class="nav-link active " aria-current="page " href="home.html ">Home</a>
+                            </li>
+                            <li class="nav-item ">
+                                <a onclick="profileclick()" class="nav-link  " style="cursor: pointer;">Profile</a>
+                            </li>
+                        </ul>
+
+                        <!--   login   -->
+                        <div id="login-div" class="column-gap-2 w-100 justify-content-end d-flex ">
+                            <button id="login-btn" type="button" class="btn btn-outline-success   " data-bs-toggle="modal" data-bs-target="#loginmodal">login</button>
+                            <button id="register-btn" data-bs-toggle="modal" data-bs-target="#registermodal" type="button" class="btn btn-outline-danger ">register</button>
+                        </div>
+                        <!-- //  login  // -->
+
+                        <!--   NONlogin   -->
+                        <div id="logout-div" class="align-items-baseline column-gap-2 w-100 justify-content-start d-flex " style="direction: rtl;">
+                            <div id="" class=" ">
+                                <button id="logout-btn" onclick="logout()" type="button" data-bs-toggle="modal" class="btn btn-outline-danger d-block ">Logout</button>
+                            </div>
+                            <div id="userinfo" class="align-items-center column-gap-2 w-100 justify-content-start d-flex ">
+
+                            </div>
+                        </div>
+                        <!-- //  NONlogin  // -->
+                    </div>
+
+                </div>
+            </nav>
+        </div>
+
+    </div>
+    <!--  //NAV BAR CONT//  -->
+
+    <div class="container d-flex justify-content-start col-lg-7 mb-5 ">
+        <h1 class="mx-2"><span id="namepost"> Mahmoud</span>'s Post</h1>
+    </div>
+
+
+
+
+    <!--  MAIN CONTENT  -->
+
+    <div id="loader" class="position-fixed  d-flex justify-content-center align-items-center " style="margin: auto auto;top: 0px;bottom: 0px;left: 0px;right: 0px;width: 100px;height: 100px;z-index: 55;background-color: #3838387a;border-radius: 25px;">
+        <div class="lds-spinner">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+
+    <div id="maincont" class="container d-flex align-items-center " style="flex-direction: column; ">
+        <!--  POSTS  -->
+
+        <div class="col-7 mb-4 ">
+            <div class="card shadow">
+                <div class="card-header d-flex align-items-center ">
+
+                    <img src="pic/user.webp" alt="" style="width: 40px;" class="image.png rounded-circle border border-2">
+                    <b class="d-inline  ">@M7M</b>
+
+
+                </div>
+                <div class="card-body">
+                    <img src="pic/2.jpg" alt="" style="width: 100%;max-height: 350px;">
+                    <p class="text-secondary mt-1">2 min ago</p>
+                    <h5>Special title</h5>
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Perspiciatis odio quo impedit tempora, hic aliquam officiis doloribus modi cupiditate accusantium .</p>
+                    <hr>
+                    <!--                COMENT AREA                 -->
+                    <div>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pen" viewBox="0 0 16 16">
+                            <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001zm-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708l-1.585-1.585z"/>
+                          </svg>
+                        <span class="bg-body-tertiary p-2 border-0  mx-3" style="border-top-left-radius:5px ;border-top-right-radius:5px ;"> 
+                            (3) comments
+                        </span>
+                        <span>
+                            <button type="button" class="btn btn-secondary btn-sm rounded-5">Small button</button>
+                        </span>
+                        <!--                COMENTS                  -->
+                        <div style=" width: 100%; " class="bg-body-tertiary p-2 ">
+                            <div class="bg-body-tertiary">
+
+                                <div>
+                                    <span><img src="pic/user.webp" alt="" style="width: 35px;" class="image.png rounded-circle "></span>
+                                    <b>mahmoud</b>
+                                </div>
+                                <div class=" shadow bg-body-tertiary d-flex align-items-center  " style="min-height: 50px; margin-left: 10%; width: 85%;">
+
+                                    <h8 class="mx-5"> Lorem ipsum </h8>
+                                </div>
+                            </div>
+                            <div class="bg-body-tertiary">
+                                <hr>
+                                <div><span><img src="pic/user.webp" alt="" style="width: 35px;" class="image.png rounded-circle "></span>
+                                    <b>@mahmoud</b>
+                                </div>
+                                <div class=" shadow bg-body-tertiary d-flex align-items-center  " style="min-height: 50px; margin-left: 10%; width: 85%;">
+
+                                    <h8 class="mx-5 my-2"> lorem150</h8>
+                                </div>
+                            </div>
+
+                        </div>
+                        <!--                // COMENTS //                 -->
+                        <div class="w-100">
+                            <span class="w-100"><textarea name="" id="" cols="30" rows="10"></textarea></span>
+                            <span> <button class="btn-primary"></button></span>
+                        </div>
+                    </div>
+                    <!--              //  COMENT AREA  //               -->
+
+                </div>
+            </div>
+        </div>
+        <!--//  POSTS  //-->
+    </div>
+    <!--//  MAIN CONTENT  //-->
+
+
+</body>
+<script src="script.js"></script>
+<script>
+    setupui()
+
+    // هي الجزئية مهمة لاستخراج الباراميتر من الرابط المرسل من الصفحة الاولى//
+    let urlparams = new URLSearchParams(window.location.search)
+    const id = urlparams.get("postid")
+    console.log(id)
+    getpostdetail(id)
+
+
+    //>>>>>>>>>>>  GET POST DETAIL FN
+    function getpostdetail(id) {
+
+        axios.get(`${baseurl}/posts/${id}`)
+            .then((response) => {
+                toggleloader(false)
+                    //console.log(response)
+                let post = response.data.data
+                let postcomments = post.comments
+                    //console.log("user id =" + post.author.id)
+                let userid = post.author.id
+                setupui(userid)
+
+
+                //              هنا الاسطر الخاصة باظهار زر التعديل لما يكون البوست خاص بالمسخدم
+                let editbtnshow = ``
+                let deletebtnshow = ``
+                let user = getcurrentuser()
+                let ismypost = user != null && post.author.id == user.id
+
+                if (ismypost) {
+                    editbtnshow = `<button onclick="editsetup('${encodeURIComponent(JSON.stringify(post))}')" id="edittt-btn" class="btn btn-secondary d-flex mx-2" data-bs-toggle="modal"  >Edit</button>
+              <!--  في الاونكليك بدل ما ابعت البيانات كل وحدة لحال زي الاي دي و العنوان ارسلت البوست كامل كاوبجكت
+                   ولان الاتش تي ام ال ما بيدعم ارسال الاوبجكت فاستخدمت هي الدالة اليي في الحدث ورجعتها لاوبجكت في الدالة حتى اقدر استخدمه 
+                   https://stackoverflow.com/questions/12109811/javascript-pass-an-object-as-the-argument-to-a-onclick-function-inside-stringا -->`
+                    deletebtnshow = ` <button onclick="deletepostsetup(${post.id})"  id="delete-btn" class="btn btn-danger  d-flex"  >Delete</button>
+               `
+
+                } else {
+                    editbtnshow = ''
+                    deletebtnshow = ''
+                }
+
+                let posttitle = ""
+
+                if (post.title != null) {
+                    posttitle = post.title
+                }
+
+                document.getElementById("namepost").innerHTML = post.author.name
+
+                document.getElementById("maincont").innerHTML = `<div class="col-7 mb-4 ">
+                    <div class="card shadow">
+                        <div  class="card-header w-100 d-flex align-items-center" >
+                            <div onclick="profileclick(${post.author.id})" style="cursor: pointer; " class="d-flex align-items-center">
+                                <img src="${post.author.profile_image}" alt="" style="width: 40px; height:40px;" class="image.png rounded-circle border border-2">
+                                <b  class="d-inline  " >@${post.author.username}</b>
+                            </div>
+                            <div class="w-100"></div>
+                            ${editbtnshow} ${deletebtnshow}
+                            
+
+                        </div>
+                        <div class="card-body" style="cursor: pointer; ">
+                            <img src="${post.image}" alt="" style="width: 100%;">
+                            <p class="text-secondary mt-1">${post.created_at}</p>
+                            <h5>${posttitle}</h5>
+                            <p>${post.body}.</p>
+                            <hr>
+                            <!--                COMENT AREA                 -->
+                            <div>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pen" viewBox="0 0 16 16">
+                                    <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001zm-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708l-1.585-1.585z"/>
+                                </svg>
+                                <span class="bg-body-tertiary p-2 border-0  mx-3" style="border-top-left-radius:5px ;border-top-right-radius:5px ;"> 
+                                    (${post.comments_count}) comments
+                                </span>
+                                <span>
+                                    <button type="button" class="btn btn-secondary btn-sm rounded-5">Small button</button>
+                                </span>
+                                <!--                COMENTS                  -->
+                                <div id="comments" style=" width: 100%;  " class="bg-body-tertiary p-2 ">
+                                    
+                                    
+                                </div>
+                                <!--                // COMENTS //                 -->
+                                <div id="addcomment" class="w-100 d-flex align-items-center">
+                                    <div class="w-100 d-flex align-items-center">
+                                        <textarea name="" id="contentcomment" style="height:55px;width:100%"></textarea>
+                                    </div>
+                                    <div> <button id="com-btn" onclick="addnewcomment(${post.id})" class="btn btn-primary "style="height:55px;width:80px">Send</button></div>
+                                </div>
+                            </div>
+                            <!--              //  COMENT AREA  //               -->
+
+                        </div>
+                    </div>
+                </div>
+        <!--//  POSTS  //-->`
+
+                for (comment of postcomments) {
+
+                    document.getElementById("comments").innerHTML += `<div class="bg-body-tertiary">
+                                <hr>
+                                <div><span><img src="${comment.author.profile_image}" alt="" style="width: 35px;height: 35px;" class="image.png rounded-circle "></span>
+                                    <b>@${comment.author.username}</b>
+                                </div>
+                                <div class=" shadow bg-body-tertiary d-flex align-items-center  " style="min-height: 50px; margin-left: 10%; width: 85%;">
+
+                                    <h8 class="mx-5 my-2">${comment.body} </h8>
+                                </div>
+                                <div class="d-flex justify-content-end ">
+                                    <p style="font-size: 1px; margin-top:15px;margin-bottom:0px">${comment.author.created_at}</p>
+                                </div>
+                            </div>`
+
+
+                }
+            }).catch((err) => {
+                alert(err.error)
+
+
+            });
+
+    }
+    //>>>>>>>>>>>  //GET POST DETAIL FN//
+
+    //>>>>>>>>>>>  ADD NEW POST FN
+    function addnewcomment(id) {
+        console.log(id)
+        let comment = document.getElementById("contentcomment").value
+            //alert(comment, id)
+        let params = {
+            "body": comment
+        }
+        const token = localStorage.getItem("token")
+            //console.log(token)
+        const headers = {
+            "Authorization": `Bearer ${token}`
+        }
+        axios.post(`${baseurl}/posts/${id}/comments`, params, {
+                headers: headers
+            })
+            .then((response) => {
+                console.log(response.data)
+                showalert(" New post has been created", "success")
+                getpostdetail(id)
+
+            })
+            .catch((error) => {
+
+                showalert(error.response.data.message, "danger")
+            })
+    }
+    //>>>>>>>>>>>  //ADD NEW POST FN//
+</script>
+
+</html>
